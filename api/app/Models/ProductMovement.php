@@ -9,8 +9,9 @@ class ProductMovement extends Model
 {
     use Uuid;
     protected $fillable = [
-        'id_product',
-        'quantity'
+        'product_id',
+        'quantity',
+        'type'
     ];
     protected $keyType = 'string';
     public $incrementing = false;

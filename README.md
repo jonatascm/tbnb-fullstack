@@ -20,8 +20,8 @@ php artisan migrate
 
 <br>
 <br>
-Generate JWT Secret:
+Serve Api:
 
 ```php
-php artisan jwt:secret
+php artisan serve
 ```

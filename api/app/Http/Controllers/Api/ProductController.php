@@ -21,12 +21,12 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
         try {
+            $data = $request->all();
             $product = ProductManager::create($data);
-            return response()->json($product, 201);
+            return response()->json($product, 200);
         } catch (\Exception $error) {
-            return response()->json(['error' => $error->getMessage()], 400);
+            return response()->json(['error' => $error], 400);
         }
     }
 

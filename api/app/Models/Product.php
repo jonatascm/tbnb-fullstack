@@ -13,7 +13,6 @@ class Product extends Model
         'name',
         'quantity',
         'description',
-        'picture_url'
     ];
     protected $attributes = ['quantity' => 0];
     protected $keyType = 'string';

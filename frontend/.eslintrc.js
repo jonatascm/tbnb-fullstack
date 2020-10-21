@@ -29,5 +29,6 @@ module.exports = {
       },
     ],
     'no-console': 'off',
+    'react/self-closing-comp': 'off',
   },
 }

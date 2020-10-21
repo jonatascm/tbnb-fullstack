@@ -1,7 +1,10 @@
 <template>
   <div>
-    <h1 class="text-center">Product List</h1>
-    <div class="mx-auto">
+    <h1 class="text-center">TBNB - Product List</h1>
+    <div class="d-flex justify-center pa-9">
+      <img width="100" height="100" src="../assets/logo.svg" />
+    </div>
+    <div class="d-flex justify-center pt-9">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -31,55 +34,59 @@
     </div>
     <v-container class="mx-auto" fluid style="margin-top: 60px; width: 30%">
       <v-list>
-        <v-list-item v-for="(product, index) in products" :key="product.id">
-          <v-list-item-content>
-            <v-list-item-title v-text="product.name" />
-            <v-list-item-subtitle v-text="product.description" />
-            <v-list-item-subtitle v-text="`Quantity: ${product.quantity}`" />
-          </v-list-item-content>
-          <v-list-item-action class="d-flex flex-row mb-6">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="selectProduct(index, product, 'movement')"
-                >
-                  <v-icon color="brown lighten-1">fas fa-exchange-alt</v-icon>
-                </v-btn>
-              </template>
-              <span>Movements</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="selectProduct(index, product, 'form')"
-                >
-                  <v-icon color="blue lighten-1">fas fa-edit</v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
+        <template v-for="(product, index) in products">
+          <v-list-item :key="product.id">
+            <v-list-item-content>
+              <v-list-item-title v-text="product.name" />
+              <v-list-item-subtitle v-text="product.description" />
+              <v-list-item-subtitle v-text="`Quantity: ${product.quantity}`" />
+            </v-list-item-content>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="selectProduct(index, product, 'delete')"
-                >
-                  <v-icon color="red lighten-1">fas fa-trash </v-icon>
-                </v-btn>
-              </template>
-              <span>Delete</span>
-            </v-tooltip>
-          </v-list-item-action>
-        </v-list-item>
+            <v-list-item-action class="d-flex flex-row mb-6">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="selectProduct(index, product, 'movement')"
+                  >
+                    <v-icon color="brown lighten-1">fas fa-exchange-alt</v-icon>
+                  </v-btn>
+                </template>
+                <span>Movements</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="selectProduct(index, product, 'form')"
+                  >
+                    <v-icon color="blue lighten-1">fas fa-edit</v-icon>
+                  </v-btn>
+                </template>
+                <span>Edit</span>
+              </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="selectProduct(index, product, 'delete')"
+                  >
+                    <v-icon color="red lighten-1">fas fa-trash </v-icon>
+                  </v-btn>
+                </template>
+                <span>Delete</span>
+              </v-tooltip>
+            </v-list-item-action>
+          </v-list-item>
+          <v-divider :key="index" />
+        </template>
       </v-list>
     </v-container>
     <ProductForm
@@ -99,6 +106,8 @@
       :visible="showMovementModal"
       :product="selectedProduct"
       @closeMovement="showMovementModal = false"
+      @addMovement="addMovement"
+      @deleteMovement="deleteMovement"
     />
     <BatchMovement
       :visible="showBatchMovementModal"
@@ -114,6 +123,7 @@ import ProductForm from './ProductForm'
 import DeleteModal from './DeleteModal'
 import ProductMovement from './ProductMovement'
 import BatchMovement from './BatchMovement'
+import dataService from '../services/data-service'
 
 export default {
   name: 'ProductList',
@@ -126,35 +136,24 @@ export default {
   data: () => ({
     selectedProduct: {},
     indexProduct: 0,
-    products: [
-      {
-        name: 'Product1',
-        description: 'Product One Description',
-        id: 'uuid-id1',
-        quantity: 20,
-        movements: [],
-      },
-      {
-        name: 'Product2',
-        description: 'Product Two Description',
-        id: 'uuid-id2',
-        quantity: 56,
-        movements: [],
-      },
-      {
-        name: 'Product3',
-        description: 'Product Three Description',
-        id: 'uuid-id3',
-        quantity: 179,
-        movements: [],
-      },
-    ],
+    products: [],
     showProductForm: false,
     showDeleteModal: false,
     showMovementModal: false,
     showBatchMovementModal: false,
   }),
+  created() {
+    this.fetchProducts()
+  },
   methods: {
+    async fetchProducts() {
+      try {
+        const products = await dataService.fetchProducts()
+        this.products = products
+      } catch (err) {
+        console.log(err)
+      }
+    },
     selectProduct(index, product, type) {
       this.indexProduct = index
       switch (type) {
@@ -177,42 +176,99 @@ export default {
       this.selectedProduct = { ...product }
       this.showDeleteModal = true
     },
-    submitAddAction(product) {
-      product.id = `uuid-${Math.random()}`
-      product.quantity = 0
-      product.movements = []
-      this.products.push(product)
+    async submitAddAction(product) {
+      try {
+        product.quantity = 0
+        product.movements = []
+        const fetchProduct = await dataService.createProduct(product)
+        this.products.push(fetchProduct)
+      } catch (err) {
+        console.log(err)
+      }
     },
-    submitEditAction(product) {
-      const newProducts = this.products.map((thisProduct) => {
-        if (thisProduct.id === product.id) {
-          return product
-        }
+    async submitEditAction(product) {
+      try {
+        await dataService.updateProduct(product)
+        const newProducts = this.products.map((thisProduct) => {
+          if (thisProduct.id === product.id) {
+            return product
+          }
 
-        return thisProduct
-      })
+          return thisProduct
+        })
 
-      this.products = newProducts
+        this.products = newProducts
+      } catch (err) {
+        console.log(err)
+      }
     },
-    submitDeleteAction(index) {
-      this.products.splice(index, 1)
+    async submitDeleteAction(index) {
+      try {
+        await dataService.deleteProduct(this.products[index].id)
+        this.products.splice(index, 1)
+      } catch (err) {
+        console.log(err)
+      }
     },
-    sendBatchMovement(movements) {
-      movements.map((movement) => {
+    async sendBatchMovement(movements) {
+      const fetchMovements = await dataService.createBatchMovement(movements)
+      fetchMovements.map((movement) => {
         const product = this.products.find(
           (product) => product.id === movement.product.id
         )
         if (product) {
           movement.productId = movement.product.id
+          product.quantity = movement.product.quantity
           product.movements.push(movement)
-          console.log(movement.type)
-          if (movement.type === 'buy') {
-            product.quantity += movement.quantity
-          } else if (movement.type === 'sell') {
-            product.quantity -= movement.quantity
-          }
         }
       })
+    },
+    async addMovement(movement) {
+      try {
+        const productIndex = this.products.findIndex(
+          (prod) => prod.id === movement.productId
+        )
+
+        if (movement.id) {
+          const fetchMovement = await dataService.updateMovement(movement)
+
+          this.products[productIndex].movements.map((move) => {
+            if (move.id === movement.id) {
+              move.type = movement.type
+              move.quantity = parseInt(movement.quantity)
+            }
+          })
+
+          this.products[productIndex].quantity = fetchMovement.product.quantity
+        } else {
+          const fetchMovement = await dataService.createMovement(movement)
+          this.products[productIndex].movements.push(fetchMovement)
+          this.products[productIndex].quantity = fetchMovement.product.quantity
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async deleteMovement(movement) {
+      try {
+        const productIndex = this.products.findIndex(
+          (prod) => prod.id === movement.product.id
+        )
+
+        await dataService.deleteMovement(movement.id)
+
+        if (movement.type === 'sell') {
+          this.products[productIndex].quantity += parseInt(movement.quantity)
+        } else if (movement.type === 'buy') {
+          this.products[productIndex].quantity -= parseInt(movement.quantity)
+        }
+
+        this.products[productIndex].movements = this.products[
+          productIndex
+        ].movements.filter((move) => move.id !== movement.id)
+      } catch (err) {
+        console.log(err)
+      }
     },
   },
 }

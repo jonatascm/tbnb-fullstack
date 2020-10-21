@@ -19,3 +19,12 @@ use Illuminate\Http\Request;
  */
 
 Route::apiResource('products', 'Api\ProductController');
+
+Route::get('', [Api\ProductMovementController::class, 'index']);
+Route::resource('/product_movements', 'Api\ProductMovementController')->only([
+    'store', 'update', 'destroy'
+]);
+
+Route::post('/product_movements/batch-create', 'Api\ProductMovementController@batchCreate');
+
+

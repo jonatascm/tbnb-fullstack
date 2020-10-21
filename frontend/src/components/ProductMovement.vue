@@ -43,7 +43,7 @@
                   icon
                   v-bind="attrs"
                   v-on="on"
-                  @click="deleteMovement(index)"
+                  @click="deleteMovement(index, movement)"
                 >
                   <v-icon medium color="red lighten-1">fas fa-trash </v-icon>
                 </v-btn>
@@ -88,32 +88,13 @@ export default {
     },
   },
   methods: {
-    onAdd() {
-      if (this.movementId) {
-        const movement = this.product.movements.find(
-          (mov) => mov.id === this.movementId
-        )
-        if (movement.type === 'sell') {
-          this.product.quantity += parseInt(movement.quantity)
-        } else if (movement.type === 'buy') {
-          this.product.quantity -= parseInt(movement.quantity)
-        }
-
-        movement.type = this.type
-        movement.quantity = parseInt(this.quantity)
-      } else {
-        this.product.movements.push({
-          id: `uuid-${Math.random()}`,
-          type: this.type,
-          quantity: parseInt(this.quantity),
-        })
-      }
-
-      if (this.type === 'sell') {
-        this.product.quantity -= parseInt(this.quantity)
-      } else if (this.type === 'buy') {
-        this.product.quantity += parseInt(this.quantity)
-      }
+    async onAdd() {
+      this.$emit('addMovement', {
+        type: this.type,
+        id: this.movementId,
+        quantity: this.quantity,
+        productId: this.product.id,
+      })
       this.type = 'buy'
       this.quantity = 0
       this.movementId = null
@@ -121,16 +102,8 @@ export default {
     onClose() {
       this.show = false
     },
-    deleteMovement(index) {
-      const movement = this.product.movements[index]
-
-      if (movement.type === 'sell') {
-        this.product.quantity += parseInt(movement.quantity)
-      } else if (movement.type === 'buy') {
-        this.product.quantity -= parseInt(movement.quantity)
-      }
-
-      this.product.movements.splice(index, 1)
+    async deleteMovement(index, movement) {
+      this.$emit('deleteMovement', { ...movement, product: this.product })
     },
     editMovement(movement) {
       this.type = movement.type
