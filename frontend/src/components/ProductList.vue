@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center">TBNB - Product List</h1>
+    <h1 class="text-center" style="color: #11abd4">TBNB - Product List</h1>
     <div class="d-flex justify-center pa-9">
       <img width="100" height="100" src="../assets/logo.svg" />
     </div>
@@ -95,6 +95,11 @@
         </transition-group>
       </v-list>
     </v-container>
+    <transition name="empty-list">
+      <div class="d-flex justify-center" v-if="!products.length">
+        <h2 style="color: #6462ed">No products registered</h2>
+      </div>
+    </transition>
     <ProductForm
       :visible="showProductForm"
       :product="selectedProduct"
@@ -287,6 +292,14 @@ export default {
 
 .list-animation-leave-active {
   animation: fade-out 0.5s;
+}
+
+.empty-list-enter-active {
+  animation: fade-in 2s;
+}
+
+.empty-list-leave-active {
+  animation: fade-out 0.2s;
 }
 
 @keyframes fade-in {

@@ -2,13 +2,18 @@
   <v-dialog v-model="show" max-width="500px" height="1000px" persistent>
     <v-card class="pa-9">
       <h1 class="text-center">Product Form</h1>
-      <v-form ref="form" lazy-validation>
-        <v-text-field v-model="product.name" label="Product" />
-        <v-text-field v-model="product.description" label="Description" />
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-text-field v-model="name" :rules="required" label="Product" />
+        <v-text-field
+          v-model="description"
+          :rules="required"
+          label="Description"
+        />
       </v-form>
-      <v-card-actions />
-      <v-btn color="primary" @click="onSubmit">Save</v-btn>
-      <v-btn color="secundary" @click="onClose">Close</v-btn>
+      <v-card-actions class="d-flex justify-space-around pt-9">
+        <v-btn :disabled="!valid" color="primary" @click="onSubmit">Save</v-btn>
+        <v-btn color="secundary" @click="onClose">Close</v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -30,7 +35,11 @@ export default {
   },
   data() {
     return {
-      oldProduct: this.product,
+      valid: true,
+      name: this.product.name,
+      description: this.product.description,
+      id: this.product.id,
+      required: [(v) => !!v || 'Is required'],
     }
   },
   computed: {
@@ -47,12 +56,23 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.$refs.form.validate()
       this.show = false
-      if (this.product.id) {
-        this.$emit('submit', this.product)
+      if (this.id) {
+        this.$emit('submit', {
+          id: this.id,
+          name: this.name,
+          description: this.description,
+        })
       } else {
-        this.$emit('submitAdd', this.product)
+        this.$emit('submitAdd', {
+          name: this.name,
+          description: this.description,
+        })
       }
+      this.name = ''
+      this.description = ''
+      this.id = ''
     },
     onClose() {
       this.show = false
