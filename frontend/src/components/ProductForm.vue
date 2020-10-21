@@ -3,9 +3,13 @@
     <v-card class="pa-9">
       <h1 class="text-center">Product Form</h1>
       <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field v-model="name" :rules="required" label="Product" />
         <v-text-field
-          v-model="description"
+          v-model="product.name"
+          :rules="required"
+          label="Product"
+        />
+        <v-text-field
+          v-model="product.description"
           :rules="required"
           label="Description"
         />
@@ -58,16 +62,16 @@ export default {
     onSubmit() {
       this.$refs.form.validate()
       this.show = false
-      if (this.id) {
+      if (this.product.id) {
         this.$emit('submit', {
-          id: this.id,
-          name: this.name,
-          description: this.description,
+          id: this.product.id,
+          name: this.product.name,
+          description: this.product.description,
         })
       } else {
         this.$emit('submitAdd', {
-          name: this.name,
-          description: this.description,
+          name: this.product.name,
+          description: this.product.description,
         })
       }
       this.name = ''

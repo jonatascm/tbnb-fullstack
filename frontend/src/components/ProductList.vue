@@ -192,6 +192,7 @@ export default {
         product.quantity = 0
         product.movements = []
         const fetchProduct = await dataService.createProduct(product)
+        console.log(fetchProduct)
         this.products.push(fetchProduct)
       } catch (err) {
         console.log(err)
@@ -199,10 +200,10 @@ export default {
     },
     async submitEditAction(product) {
       try {
-        await dataService.updateProduct(product)
+        const fetchProduct = await dataService.updateProduct(product)
         const newProducts = this.products.map((thisProduct) => {
-          if (thisProduct.id === product.id) {
-            return product
+          if (thisProduct.id === fetchProduct.id) {
+            return fetchProduct
           }
 
           return thisProduct
@@ -254,7 +255,9 @@ export default {
         } else {
           const fetchMovement = await dataService.createMovement(movement)
           this.products[productIndex].movements.push(fetchMovement)
-          this.products[productIndex].quantity = fetchMovement.product.quantity
+          this.products[productIndex].quantity = parseInt(
+            fetchMovement.product.quantity
+          )
         }
       } catch (err) {
         console.log(err)

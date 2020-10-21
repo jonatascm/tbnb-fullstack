@@ -21,42 +21,44 @@
         <h2 class="text-center">No batch movement</h2>
       </div>
       <v-list>
-        <v-list-item v-for="(movement, index) in movements" :key="movement.id">
-          <v-list-item-content>
-            <v-list-item-title v-text="movement.product.name" />
-            <v-list-item-subtitle v-text="movement.quantity" />
-            <v-list-item-subtitle v-text="movement.type" />
-          </v-list-item-content>
-          <v-list-item-action class="d-flex flex-row mb-6">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="editMovement(movement, index)"
-                >
-                  <v-icon medium color="blue lighten-1">fas fa-edit</v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
+        <transition-group name="list-animation">
+          <v-list-item v-for="(movement, index) in movements" :key="index">
+            <v-list-item-content>
+              <v-list-item-title v-text="movement.product.name" />
+              <v-list-item-subtitle v-text="movement.quantity" />
+              <v-list-item-subtitle v-text="movement.type" />
+            </v-list-item-content>
+            <v-list-item-action class="d-flex flex-row mb-6">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="editMovement(movement, index)"
+                  >
+                    <v-icon medium color="blue lighten-1">fas fa-edit</v-icon>
+                  </v-btn>
+                </template>
+                <span>Edit</span>
+              </v-tooltip>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="deleteMovement(index)"
-                >
-                  <v-icon medium color="red lighten-1">fas fa-trash </v-icon>
-                </v-btn>
-              </template>
-              <span>Delete</span>
-            </v-tooltip>
-          </v-list-item-action>
-        </v-list-item>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="deleteMovement(index)"
+                  >
+                    <v-icon medium color="red lighten-1">fas fa-trash </v-icon>
+                  </v-btn>
+                </template>
+                <span>Delete</span>
+              </v-tooltip>
+            </v-list-item-action>
+          </v-list-item>
+        </transition-group>
       </v-list>
       <v-btn color="primary" @click="onSendBatch">Send batch</v-btn>
     </v-card>
@@ -133,3 +135,45 @@ export default {
   },
 }
 </script>
+
+<style>
+.list-animation-enter-active {
+  animation: fade-in 0.5s;
+}
+
+.list-animation-leave-active {
+  animation: fade-out 0.5s;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(30px);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-20px);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+}
+</style>

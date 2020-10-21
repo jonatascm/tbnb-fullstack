@@ -94,7 +94,7 @@ export default {
       this.$emit('addMovement', {
         type: this.type,
         id: this.movementId,
-        quantity: this.quantity,
+        quantity: parseInt(this.quantity),
         productId: this.product.id,
       })
       this.type = 'buy'
@@ -109,8 +109,9 @@ export default {
     },
     editMovement(movement) {
       this.type = movement.type
-      this.quantity = movement.quantity
+      this.quantity = parseInt(movement.quantity)
       this.movementId = movement.id
+      console.log('Aqui!')
     },
   },
 }
@@ -127,11 +128,11 @@ export default {
 
 @keyframes fade-in {
   0% {
-    transform: translateX(-50px);
+    transform: translateX(-30px);
     opacity: 0;
   }
   50% {
-    transform: translateX(50px);
+    transform: translateX(30px);
     opacity: 0.5;
   }
 
@@ -147,12 +148,12 @@ export default {
     opacity: 1;
   }
   50% {
-    transform: translateX(-25px);
+    transform: translateX(-20px);
     opacity: 0.5;
   }
 
   100% {
-    transform: translateX(50px);
+    transform: translateX(30px);
     opacity: 0;
   }
 }
