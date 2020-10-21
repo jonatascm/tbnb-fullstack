@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center"> TurnoverBnB - Fullstack Challenge </h1>
-  <p align="center"> ![Laravel 6]("https://img.shields.io/badge/laravel%20-%23FF2D20.svg?&style=for-the-badge&logo=laravel&logoColor=white"),![MySQL]("https://img.shields.io/badge/mysql-%2300f.svg?&style=for-the-badge&logo=mysql&logoColor=white"), ![Vue 2]("https://img.shields.io/badge/vuejs%20-%2335495e.svg?&style=for-the-badge&logo=vue.js&logoColor=%234FC08D") </p>
+  <p align="center"> ![Laravel 6](https://img.shields.io/badge/laravel%20-%23FF2D20.svg?&style=for-the-badge&logo=laravel&logoColor=white),![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?&style=for-the-badge&logo=mysql&logoColor=white), ![Vue 2](https://img.shields.io/badge/vuejs%20-%2335495e.svg?&style=for-the-badge&logo=vue.js&logoColor=%234FC08D) </p>
 </p>
 <br>
 <br>
