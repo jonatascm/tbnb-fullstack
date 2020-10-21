@@ -8,9 +8,9 @@
 ## 1st - Run Laravel Api
 
 Initial configurations:
--Have a composer installed: https://getcomposer.org/download/
--Copy .env.example to .env
--Set mysql database configuration, change this lines in .env
+-Have a composer installed: https://getcomposer.org/download/ <br>
+-Copy .env.example to .env<br>
+-Set mysql database configuration, change this lines in .env<br>
 
 ```
 DB_CONNECTION=mysql
@@ -21,7 +21,8 @@ DB_USERNAME=XXXXX
 DB_PASSWORD=XXXXXX
 ```
 
-- Run the followings commands in api folder:
+<br>
+### Run the followings commands in api folder:<br>
 
 ```
 composer install
@@ -29,14 +30,17 @@ php artisan migrate
 php artisan serve
 ```
 
+<br><br>
+
 ## 2nd - Run Vue Frontend
 
 Initial configurations:
--Have npm installed: https://www.npmjs.com/get-npm
--Copy .env.example to .env
--Configure the api url to point to laravel api
+-Have npm installed: https://www.npmjs.com/get-npm<br>
+-Copy .env.example to .env<br>
+-Configure the api url to point to laravel api<br>
+<br>
 
-- Run the followings commands in frontend folder:
+### Run the followings commands in frontend folder:
 
 ```
 npm install
