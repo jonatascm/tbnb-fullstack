@@ -34,59 +34,65 @@
     </div>
     <v-container class="mx-auto" fluid style="margin-top: 60px; width: 30%">
       <v-list>
-        <template v-for="(product, index) in products">
-          <v-list-item :key="product.id">
-            <v-list-item-content>
-              <v-list-item-title v-text="product.name" />
-              <v-list-item-subtitle v-text="product.description" />
-              <v-list-item-subtitle v-text="`Quantity: ${product.quantity}`" />
-            </v-list-item-content>
+        <transition-group name="list-animation">
+          <template v-for="(product, index) in products">
+            <v-list-item :key="product.id">
+              <v-list-item-content>
+                <v-list-item-title v-text="product.name" />
+                <v-list-item-subtitle v-text="product.description" />
+                <v-list-item-subtitle
+                  v-text="`Quantity: ${product.quantity}`"
+                />
+              </v-list-item-content>
 
-            <v-list-item-action class="d-flex flex-row mb-6">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="selectProduct(index, product, 'movement')"
-                  >
-                    <v-icon color="brown lighten-1">fas fa-exchange-alt</v-icon>
-                  </v-btn>
-                </template>
-                <span>Movements</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="selectProduct(index, product, 'form')"
-                  >
-                    <v-icon color="blue lighten-1">fas fa-edit</v-icon>
-                  </v-btn>
-                </template>
-                <span>Edit</span>
-              </v-tooltip>
+              <v-list-item-action class="d-flex flex-row mb-6">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="selectProduct(index, product, 'movement')"
+                    >
+                      <v-icon color="brown lighten-1">
+                        fas fa-exchange-alt
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Movements</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="selectProduct(index, product, 'form')"
+                    >
+                      <v-icon color="blue lighten-1">fas fa-edit</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Edit</span>
+                </v-tooltip>
 
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="selectProduct(index, product, 'delete')"
-                  >
-                    <v-icon color="red lighten-1">fas fa-trash </v-icon>
-                  </v-btn>
-                </template>
-                <span>Delete</span>
-              </v-tooltip>
-            </v-list-item-action>
-          </v-list-item>
-          <v-divider :key="index" />
-        </template>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="selectProduct(index, product, 'delete')"
+                    >
+                      <v-icon color="red lighten-1">fas fa-trash </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Delete</span>
+                </v-tooltip>
+              </v-list-item-action>
+            </v-list-item>
+            <v-divider :key="index" />
+          </template>
+        </transition-group>
       </v-list>
     </v-container>
     <ProductForm
@@ -273,3 +279,45 @@ export default {
   },
 }
 </script>
+
+<style>
+.list-animation-enter-active {
+  animation: fade-in 0.5s;
+}
+
+.list-animation-leave-active {
+  animation: fade-out 0.5s;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(50px);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-25px);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+}
+</style>
